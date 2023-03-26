@@ -3,7 +3,14 @@
 
 class Node
 {
-	Node* children[ALPHABET_SIZE];
-	bool isEndOfWord[26];
+public:
+		Node()
+		{
+		}
+private:
+	Node* children[ALPHABET_SIZE]{ nullptr };
+	bool isEndOfWord[26]{ false };
+
+	friend class Book;
 };
 

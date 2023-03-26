@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "Node.h"
 
 class Book
@@ -10,9 +11,13 @@ public:
 	}
 	~Book()
 	{
-		delete root;
+		delete pRoot;
 	}
+
+	Node* createNewNode();
+	void insert(const std::string& key);
+
 private:
-	Node* root = new Node;
+	Node* pRoot = new Node;
 };
 

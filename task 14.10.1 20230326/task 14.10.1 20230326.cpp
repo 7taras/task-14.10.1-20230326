@@ -2,10 +2,21 @@
 //
 
 #include <iostream>
+#include "Book.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    Book vocabulary();
+    //vocabulary.insert("cat");
+    //insert(root, "rat");
+    //insert(root, "cab");
+    //insert(root, "cabs");
+    //insert(root, "raby");
+    //insert(root, "rab");
+    //vocabulary.print();
+    
+
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
