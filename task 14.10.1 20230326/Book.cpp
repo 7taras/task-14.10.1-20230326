@@ -11,7 +11,7 @@ Node* Book::createNewNode()
 void Book::insert(const std::string& key)
 {
     std::string mkey;
-    for (auto i = 0; i < key.size(); ++i)
+    for (int i = 0; i < key.size(); ++i)
     {
         if (key[i] >= 'a' && key[i] <= 'z') mkey.push_back(key[i]);
         if (key[i] >= 'A' && key[i] <= 'Z') mkey.push_back(key[i] + 32);
@@ -26,18 +26,16 @@ void Book::insert(const std::string& key)
         
     Node* tempNode = pRoot;
 
-    for (int i = 0; i < key.length(); i++)
+    for (int i = 0; i < (key.length() - 1); i++)
     {
         int index = key[i] - 'a';
-
-        if (!tempNode->children[index])
+        if (tempNode->children[index] == nullptr)
+        {
             tempNode->children[index] = createNewNode();
-
+        }
         tempNode = tempNode->children[index];
-    }
-
-    // помечаем последний узлел как лист, т.е. конец слова
-    tempNode->isEndOfWord = true;
+    }    
+    tempNode->isEndOfWord[key[(key.length() - 1)] - 'a'] = true;
 }
 //
 //// Возврашает true если ключ есть в дереве, иначе false 
@@ -106,37 +104,37 @@ void Book::insert(const std::string& key)
 //    return root;
 //}
 //
-//void print(TrieNode* root)
-//{
-//    if (root->isEndOfWord == true) return;
-//    string word;
-//    for (int i = 0; i < ALPHABET_SIZE; i++)
-//    {
-//        if (root->children[i] != nullptr)
-//        {
-//            word.push_back(char(i + 'a'));
-//            scan(root->children[i], word);
-//        }
-//    }
-//}
-//
-//void scan(TrieNode* root, string& word)
-//{
-//    if (root->isEndOfWord == true)
-//    {
-//        cout << word << ' ';
-//        //word.pop_back();
-//    }
-//
-//    {
-//        for (int i = 0; i < ALPHABET_SIZE; i++)
-//        {
-//            if (root->children[i] != nullptr)
-//            {
-//                word.push_back(char(i + 'a'));
-//                scan(root->children[i], word);
-//            }
-//        }
-//        word.pop_back();
-//    }
-//}
+void print(TrieNode* root)
+{
+    //if (root->isEndOfWord == true) return;
+    string word;
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+    {
+        if (root->children[i] != nullptr)
+        {
+            word.push_back(char(i + 'a'));
+            scan(root->children[i], word);
+        }
+    }
+}
+
+void scan(Node* root, string& word)
+{
+    if (root->isEndOfWord == true)
+    {
+        cout << word << ' ';
+        //word.pop_back();
+    }
+
+    {
+        for (int i = 0; i < ALPHABET_SIZE; i++)
+        {
+            if (root->children[i] != nullptr)
+            {
+                word.push_back(char(i + 'a'));
+                scan(root->children[i], word);
+            }
+        }
+        word.pop_back();
+    }
+}

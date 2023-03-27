@@ -7,7 +7,11 @@
 int main()
 {
     Book vocabulary();
-    //vocabulary.insert("cat");
+    vocabulary.insert("cat");
+    vocabulary.insert("cab");
+    vocabulary.insert("car");
+    vocabulary.insert("cow");
+    vocabulary.insert("boy");
     //insert(root, "rat");
     //insert(root, "cab");
     //insert(root, "cabs");
