@@ -2,10 +2,14 @@
 //
 
 #include <iostream>
+#include <conio.h> // for _getch()
 #include "Book.h"
 
 int main()
 {
+    std::string word;
+    std::vector<std::string> suffixes;
+
     Book vocabulary;
     vocabulary.insert("air");
     vocabulary.insert("boy");
@@ -59,17 +63,40 @@ int main()
     //std::cout << vocabulary.remove("cow") << '\n';
     //vocabulary.print();
 
-    std::vector<std::string> temp;
-    vocabulary.find("cap", temp);
-    for (auto it : temp)
+    
+    vocabulary.find("cap", suffixes);
+    for (auto it : suffixes)
     {
         std::cout << it << ' ';
     }
     std::cout << '\n';
 
+
+    char ch = 'X';
+    std::cin.clear();
+    while (ch != '+')
+    {
+        ch = _getch();
+        std::cout << ch;
+        word.push_back(ch);
+    }
+    vocabulary.find(word, suffixes);
+    std::cout << char(0x08);
+
+    int counter = 0;
+    std::cout << suffixes[counter];
+    ++counter;
+    if (counter == suffixes.size()) counter = 0;
+    while (_getch())
+    {
+        std::cout << suffixes[counter];
+        ++counter;
+        if (counter == suffixes.size()) counter = 0;
+    }
+
     /*while (true)
     {
-        std::cout << "Type first letters of word and press button '+'";
+        std::cout << "Type first letters of word and press button '+' for promt.\nTry press '+' again and again.";
     }*/
 
 
