@@ -6,30 +6,73 @@
 
 int main()
 {
-    Book vocabulary();
+    Book vocabulary;
+    vocabulary.insert("air");
+    vocabulary.insert("boy");
     vocabulary.insert("cat");
     vocabulary.insert("cab");
     vocabulary.insert("car");
+    vocabulary.insert("cast");
+    vocabulary.insert("caught");
     vocabulary.insert("cow");
-    vocabulary.insert("boy");
-    //insert(root, "rat");
-    //insert(root, "cab");
-    //insert(root, "cabs");
-    //insert(root, "raby");
-    //insert(root, "rab");
-    //vocabulary.print();
+    vocabulary.insert("cage");
+    vocabulary.insert("cake");
+    vocabulary.insert("calulate");
+    vocabulary.insert("call");
+    vocabulary.insert("calm");
+    vocabulary.insert("can");
+    vocabulary.insert("cancel");
+    vocabulary.insert("candy");
+    vocabulary.insert("cap");
+    vocabulary.insert("capacity");
+    vocabulary.insert("capital");
+    vocabulary.insert("captain"); 
+    vocabulary.insert("cast");
+    vocabulary.insert("card");
+    vocabulary.insert("care");
+    vocabulary.insert("case");
+    vocabulary.insert("cash");
+    vocabulary.insert("catch");
+    vocabulary.insert("castle");
+    vocabulary.insert("cell");
+    vocabulary.insert("chair");
+    vocabulary.insert("change");
+    vocabulary.insert("chat");
+    vocabulary.insert("circle");
+    vocabulary.insert("city");
+    vocabulary.insert("class");
+    vocabulary.insert("click");
+    vocabulary.insert("close");
+    vocabulary.insert("code");
+    vocabulary.insert("color");
+    vocabulary.insert("column");
+    vocabulary.insert("coin");
+    vocabulary.insert("comfort");
+    vocabulary.insert("commit");
+    vocabulary.insert("crash");
+    vocabulary.insert("crazy");
     
+    //vocabulary.print();
+    //std::cout << vocabulary.remove("boy") << '\n';
+    //vocabulary.print();
+    //std::cout << vocabulary.remove("boys") << '\n';
+    //std::cout << vocabulary.remove("cow") << '\n';
+    //vocabulary.print();
+
+    std::vector<std::string> temp;
+    vocabulary.find("cap", temp);
+    for (auto it : temp)
+    {
+        std::cout << it << ' ';
+    }
+    std::cout << '\n';
+
+    /*while (true)
+    {
+        std::cout << "Type first letters of word and press button '+'";
+    }*/
+
+
 
     return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

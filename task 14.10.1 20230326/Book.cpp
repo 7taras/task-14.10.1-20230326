@@ -1,10 +1,8 @@
 ﻿#include "Book.h"
 
-Node* Book::createNewNode()
+Node* Book::createNewNode(Node* parent)
 {
-    Node* pNode = new Node;
-    //for (int i = 0; i < ALPHABET_SIZE; i++)
-    //    pNode->children[i] = nullptr;
+    Node* pNode = new Node(parent);
     return pNode;
 }
 
@@ -17,124 +15,170 @@ void Book::insert(const std::string& key)
         if (key[i] >= 'A' && key[i] <= 'Z') mkey.push_back(key[i] + 32);
     }
 
-    if (mkey.size() == 0) return;
-    if (mkey.size() == 1)
+    if (mkey.size() <= 1) return;
+    if (mkey.size() == 2)
     {
-        pRoot->isEndOfWord[key[0] - 'a'] = true;
+        pRoot->isEndOfWord[mkey[1] - 'a'] = true;
         return;
     }
-        
-    Node* tempNode = pRoot;
 
-    for (int i = 0; i < (key.length() - 1); i++)
+    Node* tempNode = pRoot;
+    for (int i = 0; i < (mkey.length() - 1); i++)
     {
-        int index = key[i] - 'a';
+        int index = mkey[i] - 'a';
         if (tempNode->children[index] == nullptr)
         {
-            tempNode->children[index] = createNewNode();
+            tempNode->children[index] = createNewNode(tempNode);
         }
         tempNode = tempNode->children[index];
-    }    
-    tempNode->isEndOfWord[key[(key.length() - 1)] - 'a'] = true;
+    }
+    tempNode->isEndOfWord[mkey[(mkey.length() - 1)] - 'a'] = true;
 }
-//
-//// Возврашает true если ключ есть в дереве, иначе false 
-//bool search(struct TrieNode* root, string key)
-//{
-//    struct TrieNode* node = root;
-//
-//    for (int i = 0; i < key.length(); i++)
-//    {
-//        int index = key[i] - 'a';
-//        if (!node->children[index])
-//            return false;
-//
-//        node = node->children[index];
-//    }
-//
-//    return (node != nullptr && node->isEndOfWord);
-//}
-//
-//// Вохвращает true если root имеет лист, иначе false 
-//bool isEmpty(TrieNode* root)
-//{
-//    for (int i = 0; i < ALPHABET_SIZE; i++)
-//        if (root->children[i])
-//            return false;
-//    return true;
-//}
-//
-//// Рекурсивная функция удаления ключа из дерева 
-//TrieNode* remove(TrieNode* root, string key, int depth)
-//{
-//    // Если дерево пустое 
-//    if (!root)
-//        return nullptr;
-//
-//    // если дошли до конца ключа 
-//    if (depth == key.size()) {
-//
-//        // Этот узел больше не конец слова 
-//        if (root->isEndOfWord)
-//            root->isEndOfWord = false;
-//
-//        // Если ключ не евляется префиксом, удаляем его
-//        if (isEmpty(root)) {
-//            delete (root);
-//            root = nullptr;
-//        }
-//
-//        return root;
-//    }
-//
-//    // Если не дошли до конца ключа, рекурсивно вызываем для ребенка 
-//    // соответствующего символа 
-//    int index = key[depth] - 'a';
-//    root->children[index] = remove(root->children[index], key, depth + 1);
-//
-//    // Если у корня нет дочернего слова 
-//    // (удален только один его дочерний элемент), 
-//    // и он не заканчивается другим словом. 
-//    if (isEmpty(root) && root->isEndOfWord == false) {
-//        delete (root);
-//        root = nullptr;
-//    }
-//
-//    // возвращаем новый корень
-//    return root;
-//}
-//
-void print(TrieNode* root)
+
+bool Book::remove(const std::string& key)
+{       
+    std::string mkey;
+    for (int i = 0; i < key.size(); ++i)
+    {
+        if (key[i] >= 'a' && key[i] <= 'z') mkey.push_back(key[i]);
+        if (key[i] >= 'A' && key[i] <= 'Z') mkey.push_back(key[i] + 32);
+    }
+    
+    if (mkey.size() <= 1) return false;
+    if (mkey.size() == 2)
+    {
+        pRoot->isEndOfWord[mkey[1] - 'a'] = false;
+        return true;
+    }
+
+    Node* tempNode = pRoot;
+    for (int i = 0; i < (mkey.length() - 1); i++)
+    {
+        int index = mkey[i] - 'a';
+        if (tempNode->children[index] == nullptr) return false;
+        tempNode = tempNode->children[index];
+    }
+    if (tempNode->isEndOfWord[mkey[(mkey.length() - 1)] - 'a'] == false) return false;
+    else
+    {
+        tempNode->isEndOfWord[mkey[(mkey.length() - 1)] - 'a'] = false;
+    }
+
+    if (tempNode->children[mkey[(mkey.length() - 1)] - 'a'] != nullptr) return true;
+    else
+    {
+        subremove(tempNode, mkey);
+        return true;
+    }
+}
+
+void Book::subremove(Node* root, std::string& mkey)
 {
-    //if (root->isEndOfWord == true) return;
-    string word;
+    for (int i = 0; i < ALPHABET_SIZE; ++i)
+    {
+        if (root->isEndOfWord[i] == true) return;
+        if (root->children[i] != nullptr) return;
+    }
+    Node* temp = root->parent;
+    temp->children[mkey[(mkey.length() - 2)] - 'a'] = nullptr;
+    delete root;
+    mkey.pop_back();
+    subremove(temp, mkey);
+    return;
+}
+
+bool Book::find(const std::string& key, std::vector<std::string>& passedWords)
+{
+    passedWords.clear();
+    std::string mkey;
+    for (int i = 0; i < key.size(); ++i)
+    {
+        if (key[i] >= 'a' && key[i] <= 'z') mkey.push_back(key[i]);
+        if (key[i] >= 'A' && key[i] <= 'Z') mkey.push_back(key[i] + 32);
+    }
+
+    Node* head = pRoot;
+    for (int i = 0; i < mkey.size(); ++i)
+    {
+        if (head->children[mkey[i] - 'a'] == nullptr) return false;
+        else
+        {
+            head = head->children[mkey[i] - 'a'];
+        }        
+    }
+
+    std::string word;
     for (int i = 0; i < ALPHABET_SIZE; i++)
     {
+        if (head->isEndOfWord[i] == true)
+        {
+            word.push_back(char(i + 'a'));
+            passedWords.push_back(word);
+            word.pop_back();
+        }
+        if (head->children[i] != nullptr)
+        {
+            word.push_back(char(i + 'a'));
+            subfind(head->children[i], word, passedWords);
+        }
+    }
+    return true;
+}
+
+void Book::subfind(Node* root, std::string& word, std::vector<std::string>& passedWords)
+{
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+    {
+        if (root->isEndOfWord[i] == true)
+        {
+            word.push_back(char(i + 'a'));
+            passedWords.push_back(word);
+            word.pop_back();
+        }
         if (root->children[i] != nullptr)
         {
             word.push_back(char(i + 'a'));
-            scan(root->children[i], word);
+            subfind(root->children[i], word, passedWords);
         }
     }
+    word.pop_back();
 }
 
-void scan(Node* root, string& word)
+void Book::print()
 {
-    if (root->isEndOfWord == true)
+    std::string word;
+    for (int i = 0; i < ALPHABET_SIZE; i++)
     {
-        cout << word << ' ';
-        //word.pop_back();
-    }
-
-    {
-        for (int i = 0; i < ALPHABET_SIZE; i++)
+        if (pRoot->isEndOfWord[i] == true)
         {
-            if (root->children[i] != nullptr)
-            {
-                word.push_back(char(i + 'a'));
-                scan(root->children[i], word);
-            }
+            word.push_back(char(i + 'a'));
+            std::cout << word << ' ';
+            word.pop_back();
         }
-        word.pop_back();
+        if (pRoot->children[i] != nullptr)
+        {
+            word.push_back(char(i + 'a'));
+            subprint(pRoot->children[i], word);
+        }
     }
+    std::cout << '\n';
+}
+
+void Book::subprint(Node* root, std::string& word)
+{
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+    {
+        if (root->isEndOfWord[i] == true)
+        {
+            word.push_back(char(i + 'a'));
+            std::cout << word << ' ';
+            word.pop_back();
+        }
+        if (root->children[i] != nullptr)
+        {
+            word.push_back(char(i + 'a'));
+            subprint(root->children[i], word);
+        }
+    }
+    word.pop_back();
 }
