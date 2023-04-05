@@ -63,43 +63,66 @@ int main()
     //std::cout << vocabulary.remove("cow") << '\n';
     //vocabulary.print();
 
-    
-    vocabulary.find("cap", suffixes);
-    for (auto it : suffixes)
-    {
-        std::cout << it << ' ';
-    }
-    std::cout << '\n';
-
-
     char ch = 'X';
+    int counter = 0;
+    int lettersCounter = 0;
+    bool plusFlag = true;
     std::cin.clear();
-    while (ch != '+')
+
+    std::cout << "Type first letters of word and press button '+' for promt.\npress '+' to next word, again and again.\nPress 'ENTER' to new type.\nPress 'ESC' to exit.\n\n";
+
+    while (true)
     {
         ch = _getch();
-        std::cout << ch;
-        word.push_back(ch);
+        if ((ch >= '!' && ch <= '*') || (ch >= ',' && ch <= '~'))
+        {
+            std::cout << ch;
+            word.push_back(ch);
+            plusFlag = true;            
+        }
+        if (ch == '+')
+        {
+            if (plusFlag)
+            {
+                suffixes.clear();
+                vocabulary.find(word, suffixes);
+                if (suffixes.size() > 0)
+                {
+                    std::cout << suffixes[counter];
+                    lettersCounter = suffixes[counter].size();
+                    ++counter;
+                    plusFlag = false;                    
+                }
+            }
+            else
+            {
+                for (int i = 0; i < lettersCounter; ++i)
+                {
+                    std::cout << char(0x08);                    
+                }
+                for (int i = 0; i < 10; ++i)
+                {
+                    std::cout << ' ';
+                }
+                for (int i = 0; i < 10; ++i)
+                {
+                    std::cout << char(0x08);
+                }
+                std::cout << suffixes[counter];
+                lettersCounter = suffixes[counter].size();
+                ++counter;
+            }
+            
+            if (counter == suffixes.size()) counter = 0;
+        }
+        if (ch == 0x0D)
+        {
+            std::cout << '\n';
+            word.clear();
+            counter = 0;
+        }
+        if (ch == 0x1B) break;
     }
-    vocabulary.find(word, suffixes);
-    std::cout << char(0x08);
-
-    int counter = 0;
-    std::cout << suffixes[counter];
-    ++counter;
-    if (counter == suffixes.size()) counter = 0;
-    while (_getch())
-    {
-        std::cout << suffixes[counter];
-        ++counter;
-        if (counter == suffixes.size()) counter = 0;
-    }
-
-    /*while (true)
-    {
-        std::cout << "Type first letters of word and press button '+' for promt.\nTry press '+' again and again.";
-    }*/
-
-
 
     return 0;
 }
